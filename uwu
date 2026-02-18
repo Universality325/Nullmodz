@@ -1,0 +1,308 @@
+local player = game.Players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+local TweenService = game:GetService("TweenService")
+
+-- Textos románticos
+local TextOne = "¿Cuál es el sentido de la vida? No lo sé… Lo único que tengo claro es que el sentido de mi vida es..."
+local TextTwo = "Amarte, cuidarte, y estar contigo hasta el último latido de mi corazón,"
+local TextThree = "Estar contigo, hacerte sonreír cada día y demostrarte que nadie te va a amar como yo."
+
+-- Servicios
+local Players = game:GetService("Players")
+local CollectionService = game:GetService("CollectionService")
+local Debris = game:GetService("Debris")
+
+-- Crear GUI principal
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "MainGui"
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+CollectionService:AddTag(screenGui, "main")
+
+-- Frame rosado pastel
+local frame = Instance.new("Frame")
+frame.Name = "MainFrame"
+frame.BackgroundColor3 = Color3.fromRGB(255, 182, 193)
+frame.BackgroundTransparency = 0.05
+frame.BorderSizePixel = 4
+frame.BorderColor3 = Color3.fromRGB(255, 105, 180)
+frame.Size = UDim2.new(0.6, 0, 0.3, 0)
+frame.Position = UDim2.new(0.2, 0, 0.65, 0)
+frame.Parent = screenGui
+
+-- Esquinas redondeadas
+local uicorner = Instance.new("UICorner")
+uicorner.CornerRadius = UDim.new(0, 20)
+uicorner.Parent = frame
+
+-- Texto romántico
+local textLabel = Instance.new("TextLabel")
+textLabel.Name = "MainText"
+textLabel.Text = "..."
+textLabel.Font = Enum.Font.GothamBold
+textLabel.TextColor3 = Color3.fromRGB(255, 240, 245)
+textLabel.TextStrokeTransparency = 0.2
+textLabel.TextStrokeColor3 = Color3.fromRGB(255, 105, 180)
+textLabel.TextScaled = true
+textLabel.TextWrapped = true
+textLabel.BackgroundTransparency = 1
+textLabel.TextTransparency = 1
+textLabel.Size = UDim2.new(1, -40, 1, -40)
+textLabel.Position = UDim2.new(0, 20, 0, 20)
+textLabel.ZIndex = 10
+textLabel.Parent = frame
+
+-- Imagen del corazón
+local image = Instance.new("ImageLabel")
+image.Name = "HeartImage"
+image.Image = "rbxassetid://8941506186"
+image.ImageTransparency = 1
+image.Size = UDim2.new(0.45, 0, 0.89, 0)
+image.Position = UDim2.new(0.28, 0, -0.07, 0)
+image.Transparency = 1
+image.BackgroundTransparency = 1
+image.BorderSizePixel = 0
+image.Parent = screenGui
+
+-- Texto "I Love You!!!"
+local loveText = Instance.new("TextLabel")
+loveText.Name = "LoveText"
+loveText.TextTransparency = 1
+loveText.Text = "I Love You!!!"
+loveText.Size = UDim2.new(0.2, 0, 0.3, 0)
+loveText.Position = UDim2.new(0.41, 0, 0.12, 0)
+loveText.BackgroundTransparency = 1
+loveText.BorderSizePixel = 0
+loveText.TextSize = 100
+loveText.FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json")
+loveText.TextColor3 = Color3.new(1, 1, 1)
+loveText.Parent = image
+
+-- Emoji 😻😻😻
+local emojiText = Instance.new("TextLabel")
+emojiText.Name = "EmojiText"
+emojiText.TextTransparency = 1 
+emojiText.Text = "😻😻😻"
+emojiText.Size = UDim2.new(0.2, 0, 0.3, 0)
+emojiText.Position = UDim2.new(0.41, 0, 0.33, 0)
+emojiText.BackgroundTransparency = 1
+emojiText.BorderSizePixel = 0
+emojiText.TextSize = 96
+emojiText.FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json")
+emojiText.TextColor3 = Color3.new(1, 1, 1)
+emojiText.Parent = image
+
+-- Tween info general
+local info = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)
+
+-- Sonido base para tecleo
+local baseTypeSound = Instance.new("Sound")
+baseTypeSound.SoundId = "rbxassetid://358280695"
+baseTypeSound.Volume = 1
+baseTypeSound.Name = "BaseTypeSound"
+baseTypeSound.Parent = textLabel
+
+-- Función efecto máquina de escribir (con clon de sonido)
+local function TypewriterEffect(label: TextLabel, text: string, sound: Sound)
+        label.Text = ""
+        for i = 1, #text do
+                label.Text = string.sub(text, 1, i)
+                local s = sound:Clone()
+                s.Parent = label
+                s:Play()
+                Debris:AddItem(s, 2)
+                wait(0.07)
+        end
+end
+
+-- Animación de cámara
+local function CamAnimation()
+        camera.CameraType = Enum.CameraType.Scriptable
+        local char = player.Character
+        if char then
+                local head = char:FindFirstChild("Head")
+                if head then
+                        char:FindFirstChild("HumanoidRootPart").Anchored = true
+                        local camPos = head.Position + Vector3.new(0, 0, -4)
+                        local goal = {
+                                CFrame = CFrame.lookAt(camPos, head.Position)
+                        }
+                        local Tween = TweenService:Create(camera, info, goal)
+                        Tween:Play()
+                end
+        end
+end
+
+-- Diálogo
+local function dialog()
+        local fadeIn = { TextTransparency = 0 }
+        local tweenIn = TweenService:Create(textLabel, TweenInfo.new(0.5), fadeIn)
+        tweenIn:Play()
+        tweenIn.Completed:Wait()
+
+        TypewriterEffect(textLabel, TextOne, baseTypeSound)
+        wait(2)
+        TypewriterEffect(textLabel, TextTwo, baseTypeSound)
+        wait(2)
+        TypewriterEffect(textLabel, TextThree, baseTypeSound)
+        wait(2)
+
+        local fadeOut = {
+                TextTransparency = 1,
+                BackgroundTransparency = 1
+        }
+        local fadeOutTwo = {
+                Transparency = 1
+        }
+        local tweenOut = TweenService:Create(textLabel, TweenInfo.new(1), fadeOut)
+        tweenOut:Play()
+        local tweenOutTwo = TweenService:Create(frame, TweenInfo.new(1), fadeOutTwo)
+        tweenOutTwo:Play()
+        tweenOutTwo.Completed:Wait()
+
+        local imageGoal = { ImageTransparency = 0 }
+        local ImageTween = TweenService:Create(image, info, imageGoal)
+        ImageTween:Play()
+
+        local textGoal = { TextTransparency = 0 }
+        local TextTween = TweenService:Create(loveText, info, textGoal)
+        local TextTweenTwo = TweenService:Create(emojiText, info, textGoal)
+
+        TextTween:Play()
+        TextTweenTwo:Play()
+        TextTweenTwo.Completed:Wait()
+
+        local OutTweenImage = { ImageTransparency = 1 }
+        local textOutTween = { TextTransparency = 1 }
+
+        local tweenOutThree = TweenService:Create(image, TweenInfo.new(1), OutTweenImage)
+        tweenOutThree:Play()
+
+        local textTweenTwoo = TweenService:Create(loveText, info, textOutTween)
+        local textTweenTwloo = TweenService:Create(emojiText, info, textOutTween)
+
+        textTweenTwloo:Play()
+        textTweenTwoo:Play()
+        textTweenTwoo.Completed:Wait()
+end
+
+-- 💋 Beso con Highlight
+local function Kiss()
+        local char = player.Character 
+        if char then
+                local head = char:FindFirstChild("Head")
+                if head then
+                        local OriginCamPos = camera.CFrame
+                        local newCameraPos = head.Position + Vector3.new(0, 0, -0.5)
+
+                        local goalOne = {
+                                CFrame = CFrame.lookAt(newCameraPos, head.Position)
+                        }
+                        local Tween = TweenService:Create(camera, info, goalOne)
+                        Tween:Play()
+
+                        local kissSound = Instance.new("Sound")
+                        kissSound.SoundId = "rbxassetid://18114177599"
+                        kissSound.Parent = head
+                        kissSound:Play()
+                        Tween.Completed:Wait()
+                        kissSound:Stop()
+
+                        local goalTwo = {
+                                CFrame = OriginCamPos
+                        }
+                        local TweenTwo = TweenService:Create(camera, info, goalTwo)
+                        TweenTwo:Play()
+
+                        task.wait(0.3)
+
+                        local highlight = Instance.new("Highlight")
+                        highlight.Adornee = head
+                        highlight.FillColor = Color3.fromRGB(255, 170, 180)
+                        highlight.FillTransparency = 1
+                        highlight.OutlineTransparency = 1
+                        highlight.Parent = head
+
+                        local fadeInHighlight = TweenService:Create(highlight, info, { FillTransparency = 0.5 })
+                        fadeInHighlight:Play()
+                        fadeInHighlight.Completed:Wait()
+
+                        local hrp = char:FindFirstChild("HumanoidRootPart")
+                        if hrp then
+                                hrp.Anchored = false
+                                local yipiii = Instance.new("Sound")
+                                yipiii.SoundId = "rbxassetid://128105257754675"
+                                yipiii.Parent = head
+                                yipiii.Looped = true
+                                yipiii:Play()
+                                for i = 1, 10 do 
+                                        char:FindFirstChild("Humanoid").Jump = true
+                                end
+                                for i = 1, 100 do
+                                        char:FindFirstChild("Humanoid").Jump = true
+                                        wait(0.01)
+                                        hrp.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(40), 0)
+                                end
+                                hrp.CFrame = CFrame.lookAt(hrp.Position, camera.CFrame.Position)
+                                wait(0.5)
+                                yipiii:Stop()
+                                char:BreakJoints()
+                        end
+                end
+        end
+end
+
+-- 🌸 Efecto final extra romántico con 🌹 como TextLabel
+local function RomanticFinal()
+        local blur = Instance.new("BlurEffect")
+        blur.Size = 0
+        blur.Parent = game.Lighting
+        local blurTween = TweenService:Create(blur, TweenInfo.new(2), { Size = 24 })
+        blurTween:Play()
+
+        local finalMsg = Instance.new("TextLabel")
+        finalMsg.Text = "Solo quería recordarte que eres lo más bonito que tengo. 💕\nGracias por estar en mi vida."
+        finalMsg.Size = UDim2.new(0.6, 0, 0.2, 0)
+        finalMsg.Position = UDim2.new(0.2, 0, 0.4, 0)
+        finalMsg.TextColor3 = Color3.new(1, 1, 1)
+        finalMsg.TextTransparency = 1
+        finalMsg.TextScaled = true
+        finalMsg.BackgroundTransparency = 1
+        finalMsg.Font = Enum.Font.GothamBold
+        finalMsg.TextWrapped = true
+        finalMsg.ZIndex = 100
+        finalMsg.Parent = screenGui
+
+        local finalTween = TweenService:Create(finalMsg, TweenInfo.new(1), { TextTransparency = 0 })
+        finalTween:Play()
+
+        local flower = Instance.new("TextLabel")
+        flower.Text = "🌹"
+        flower.TextScaled = true
+        flower.Font = Enum.Font.GothamBlack
+        flower.TextColor3 = Color3.fromRGB(255, 105, 180)
+        flower.TextTransparency = 1
+        flower.Size = UDim2.new(0.15, 0, 0.3, 0)
+        flower.Position = UDim2.new(0.425, 0, 0.15, 0)
+        flower.BackgroundTransparency = 1
+        flower.ZIndex = 101
+        flower.Parent = screenGui
+
+        local flowerTween = TweenService:Create(flower, TweenInfo.new(1), { TextTransparency = 0 })
+        flowerTween:Play()
+
+        for i = 1, 6 do
+                local scaleUp = TweenService:Create(loveText, TweenInfo.new(0.2), { Size = UDim2.new(0.22, 0, 0.33, 0) })
+                local scaleDown = TweenService:Create(loveText, TweenInfo.new(0.2), { Size = UDim2.new(0.2, 0, 0.3, 0) })
+                scaleUp:Play()
+                scaleUp.Completed:Wait()
+                scaleDown:Play()
+                scaleDown.Completed:Wait()
+        end
+end
+
+-- Ejecutar todo
+CamAnimation()
+dialog()
+Kiss()
+RomanticFinal()
