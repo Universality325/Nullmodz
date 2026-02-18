@@ -1,308 +1,592 @@
-local player = game.Players.LocalPlayer
-local camera = game.Workspace.CurrentCamera
-local TweenService = game:GetService("TweenService")
+local TextChatService = game:GetService("TextChatService")
 
--- Textos románticos
-local TextOne = "¿Cuál es el sentido de la vida? No lo sé… Lo único que tengo claro es que el sentido de mi vida es..."
-local TextTwo = "Amarte, cuidarte, y estar contigo hasta el último latido de mi corazón,"
-local TextThree = "Estar contigo, hacerte sonreír cada día y demostrarte que nadie te va a amar como yo."
+local function SendChatMessage(message)
+    if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+        local textChannel = TextChatService.TextChannels.RBXGeneral
+        textChannel:SendAsync(message)
+    else
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+    end
+end
 
--- Servicios
-local Players = game:GetService("Players")
-local CollectionService = game:GetService("CollectionService")
-local Debris = game:GetService("Debris")
+SendChatMessage("Fallen Angel: MadeBy ZDev")
+SendChatMessage("F: Destructive ball|... Z: TpToNearestPlayer|... X: EvilPulse|... C: VoidDragAll|...")
 
--- Crear GUI principal
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "MainGui"
-screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
-CollectionService:AddTag(screenGui, "main")
 
--- Frame rosado pastel
-local frame = Instance.new("Frame")
-frame.Name = "MainFrame"
-frame.BackgroundColor3 = Color3.fromRGB(255, 182, 193)
-frame.BackgroundTransparency = 0.05
-frame.BorderSizePixel = 4
-frame.BorderColor3 = Color3.fromRGB(255, 105, 180)
-frame.Size = UDim2.new(0.6, 0, 0.3, 0)
-frame.Position = UDim2.new(0.2, 0, 0.65, 0)
-frame.Parent = screenGui
 
--- Esquinas redondeadas
-local uicorner = Instance.new("UICorner")
-uicorner.CornerRadius = UDim.new(0, 20)
-uicorner.Parent = frame
+local Player = game.Players.INFINITYH4CK2
+local Char = Player.Character
+local UP = Char:FindFirstChild("UpperTorso") or Char:FindFirstChild("Torso")
+local Head = Char:FindFirstChild("Head")
+local hrp = Char:FindFirstChild("HumanoidRootPart")
+local hm = Char:FindFirstChild("Humanoid")
 
--- Texto romántico
-local textLabel = Instance.new("TextLabel")
-textLabel.Name = "MainText"
-textLabel.Text = "..."
-textLabel.Font = Enum.Font.GothamBold
-textLabel.TextColor3 = Color3.fromRGB(255, 240, 245)
-textLabel.TextStrokeTransparency = 0.2
-textLabel.TextStrokeColor3 = Color3.fromRGB(255, 105, 180)
-textLabel.TextScaled = true
-textLabel.TextWrapped = true
-textLabel.BackgroundTransparency = 1
-textLabel.TextTransparency = 1
-textLabel.Size = UDim2.new(1, -40, 1, -40)
-textLabel.Position = UDim2.new(0, 20, 0, 20)
-textLabel.ZIndex = 10
-textLabel.Parent = frame
 
--- Imagen del corazón
-local image = Instance.new("ImageLabel")
-image.Name = "HeartImage"
-image.Image = "rbxassetid://8941506186"
-image.ImageTransparency = 1
-image.Size = UDim2.new(0.45, 0, 0.89, 0)
-image.Position = UDim2.new(0.28, 0, -0.07, 0)
-image.Transparency = 1
-image.BackgroundTransparency = 1
-image.BorderSizePixel = 0
-image.Parent = screenGui
+local p = hrp.Position + Vector3.new(0,0,-2)
 
--- Texto "I Love You!!!"
-local loveText = Instance.new("TextLabel")
-loveText.Name = "LoveText"
-loveText.TextTransparency = 1
-loveText.Text = "I Love You!!!"
-loveText.Size = UDim2.new(0.2, 0, 0.3, 0)
-loveText.Position = UDim2.new(0.41, 0, 0.12, 0)
-loveText.BackgroundTransparency = 1
-loveText.BorderSizePixel = 0
-loveText.TextSize = 100
-loveText.FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json")
-loveText.TextColor3 = Color3.new(1, 1, 1)
-loveText.Parent = image
+hm:MoveTo(p)
 
--- Emoji 😻😻😻
-local emojiText = Instance.new("TextLabel")
-emojiText.Name = "EmojiText"
-emojiText.TextTransparency = 1 
-emojiText.Text = "😻😻😻"
-emojiText.Size = UDim2.new(0.2, 0, 0.3, 0)
-emojiText.Position = UDim2.new(0.41, 0, 0.33, 0)
-emojiText.BackgroundTransparency = 1
-emojiText.BorderSizePixel = 0
-emojiText.TextSize = 96
-emojiText.FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json")
-emojiText.TextColor3 = Color3.new(1, 1, 1)
-emojiText.Parent = image
+wait(0.5)
 
--- Tween info general
-local info = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)
 
--- Sonido base para tecleo
-local baseTypeSound = Instance.new("Sound")
-baseTypeSound.SoundId = "rbxassetid://358280695"
-baseTypeSound.Volume = 1
-baseTypeSound.Name = "BaseTypeSound"
-baseTypeSound.Parent = textLabel
+local function SpawnEffects()
+  local ExplosionPart = Instance.new("MeshPart")
+  ExplosionPart.Size = Vector3.new(0.1,0.1,0.1)
+  ExplosionPart.Material = Enum.Material.Neon
+  ExplosionPart.Color = Color3.fromRGB(1,1,1)
+  ExplosionPart.MeshId = "rbxassetid://930476639"
+  ExplosionPart.Parent = Char
+  
+  local sound = Instance.new("Sound")
+  sound.Name = "Music"
+  sound.SoundId = "rbxassetid://14145625078"
+  sound.Volume = 10
+  sound.Looped = true
+  sound.Parent = hrp
+  sound:Play()
+  
+  return ExplosionPart
+end
 
--- Función efecto máquina de escribir (con clon de sonido)
-local function TypewriterEffect(label: TextLabel, text: string, sound: Sound)
-        label.Text = ""
-        for i = 1, #text do
-                label.Text = string.sub(text, 1, i)
-                local s = sound:Clone()
-                s.Parent = label
-                s:Play()
-                Debris:AddItem(s, 2)
-                wait(0.07)
+local expPart = SpawnEffects()
+
+for i = 0.1,0.5,0.1 do
+  expPart.CFrame = UP.CFrame
+  expPart.Size = Vector3.new(i,i,i)
+  task.wait(0.001)
+end
+
+for i = 0.5,0.1,-0.1 do
+  expPart.CFrame = UP.CFrame
+  expPart.Size = Vector3.new(i,i,i)
+  task.wait(0.001)
+end
+
+task.spawn(function()
+  for i = 0.1,0.5,0.1 do
+  expPart.CFrame = UP.CFrame
+  expPart.Size = Vector3.new(i,i,i)
+  task.wait(0.001)
+end
+
+expPart:Destroy()
+expPart = nil
+end)
+
+
+
+local altura = 2
+
+
+
+local function ModifyChar()
+  for _, obj in ipairs(Char:GetChildren()) do
+    if obj:IsA("BasePart") then
+      obj.Material = Enum.Material.Neon
+      obj.Color = Color3.fromRGB(1,1,1)
+      if obj == Head then
+        obj.Transparency = 1
+        obj:FindFirstChild("face"):Destroy()
+      end
+      
+      if obj.Name == "Face" or obj.Name == "face" then
+        obj:Destroy()
+      end
+    end
+    
+    if obj:IsA("Pants") or obj:IsA("Shirt") or obj:IsA("Accessory") then
+      obj:Destroy()
+    end
+  end
+  
+  if Char.Animate then
+    Char.Animate:Destroy()
+  end
+  
+  local aura = Instance.new("Fire")
+  aura.Size = 10
+  aura.Color = Color3.fromRGB(1,1,1)
+  aura.SecondaryColor = Color3.fromRGB(255,0,0)
+  aura.Heat = 0.1
+  aura.Parent = hrp
+end
+
+ModifyChar()
+
+local LeftWingId = "rbxassetid://125496490342257"
+local HaloId = "rbxassetid://17228181333"
+
+local function MakeMeshParts()
+  local LeftWing = Instance.new("MeshPart")
+  LeftWing.Name = "LeftWing"
+  LeftWing.Color = Color3.fromRGB(1,1,1)
+  LeftWing.CanCollide = false
+  LeftWing.MeshId = LeftWingId
+  LeftWing.Size = Vector3.new(1,1,1)
+  LeftWing.Parent = Char
+  
+  local Halo = Instance.new("MeshPart")
+  Halo.Name = "Halo"
+  Halo.MeshId = HaloId
+  Halo.Material = Enum.Material.Neon
+  Halo.Color = Color3.fromRGB(255,255,0)
+  Halo.CanCollide = false
+  Halo.Size = Vector3.new(0.7,1,0.7)
+  Halo.Parent = Char
+  
+  return {
+    LeftWing = LeftWing,
+    Halo = Halo
+  }
+end
+
+
+local Run = game:GetService("RunService")
+
+local MeshParts = MakeMeshParts()
+local LeftWing = MeshParts.LeftWing
+local Halo = MeshParts.Halo
+local FakeHead = Head:Clone()
+FakeHead.Material = Enum.Material.Neon
+FakeHead.Transparency = 0
+FakeHead.Parent = Char
+
+if FakeHead:FindFirstChild("face") then
+  FakeHead:FindFirstChild("face"):Destroy()
+end
+
+local i = 0
+
+
+Run.Heartbeat:Connect(function(deltaTime)
+  hm.HipHeight = altura
+  
+  FakeHead.CFrame = Head.CFrame
+  
+  LeftWing.CFrame = UP.CFrame * CFrame.new(-3,3.5,0.8)
+  LeftWing.CFrame = LeftWing.CFrame * CFrame.Angles(math.rad(7),math.rad(-20),math.rad(5))
+  
+  Halo.CFrame = Head.CFrame * CFrame.new(0,1,0)
+  Halo.CFrame = Halo.CFrame * CFrame.Angles(math.rad(0),math.rad(i),math.rad(0))
+  
+  i = i + 100
+end)
+
+
+local isIdle = true
+local isMove = false
+
+local isPlayIdleAnim = false
+local isPlayMoveAnim = false
+
+local IdleAnimId = "rbxassetid://10714347256"
+local MoveAnimId = "rbxassetid://15698404340"
+
+local SlideSpeed = 80
+
+local function PlayAnim(Id,Time)
+  local Animation = Instance.new("Animation")
+  Animation.AnimationId = Id
+  
+  local track = hm:LoadAnimation(Animation)
+  track:Play()
+  track:AdjustSpeed(0)
+  track.TimePosition = Time
+end
+
+Run.Heartbeat:Connect(function(deltaTime)
+  local Vel = Vector3.new(hrp.Velocity.X , 0 , hrp.Velocity.Z)
+  if Vel.Magnitude <= 2 then
+    isIdle = true
+    isMove = false
+  elseif Vel.Magnitude >= 5 then
+    isIdle = false
+    isMove = true
+  end
+  
+  if isIdle and isPlayIdleAnim == false then
+    PlayAnim(IdleAnimId,1)
+    isPlayIdleAnim = true
+  elseif isIdle == false then
+    for _, obj in ipairs(hm:GetPlayingAnimationTracks()) do
+      if obj.Animation.AnimationId == IdleAnimId then
+        obj:Stop()
+        isPlayIdleAnim = false
+      end
+    end
+  end
+  
+  if isMove and isPlayMoveAnim == false then
+    PlayAnim(MoveAnimId,1)
+    isPlayMoveAnim = true
+  elseif isMove == false then
+    for _, obj in ipairs(hm:GetPlayingAnimationTracks()) do
+      if obj.Animation.AnimationId == MoveAnimId then
+        obj:Stop()
+        isPlayMoveAnim = false
+      end
+    end
+  end
+  
+  if isMove then
+    local dir = hm.MoveDirection.Unit
+    if dir.Magnitude > 0 then
+    hrp.CFrame = hrp.CFrame + (dir * SlideSpeed * deltaTime)
+    end
+  end
+end)
+
+task.spawn(function()
+for i = 1,900000,1 do
+  for _, obj in ipairs(Char:GetChildren()) do
+    if obj.Name ~= "Halo" or obj.Name ~= "LeftWing" then
+      if obj:IsA("BasePart") then
+        obj.Color = Color3.fromRGB(255,0,0)
+        task.wait(0.01)
+        if obj.Name ~= "Halo" then
+        obj.Color = Color3.fromRGB(1,1,1)
+        else
+          obj.Color = Color3.fromRGB(255,255,0)
         end
+      end
+    end
+  end
+  task.wait(0.5)
+end
+end)
+
+local InCooldownBlackBall = false
+
+
+
+local function BlackBallAttack()
+  InCooldownBlackBall = true
+  PlayAnim("rbxassetid://10714395441",0.37)
+  for _, t in ipairs(hm:GetPlayingAnimationTracks()) do
+    if t.Animation then
+      if t.Animation.AnimationId == IdleAnimId or t.Animation.AnimationId == MoveAnimId then
+        t:Stop()
+      end
+    end
+  end
+  
+  local BlackBall = Instance.new("Part")
+  BlackBall.Shape = Enum.PartType.Ball
+  BlackBall.Material = Enum.Material.Neon
+  BlackBall.Color = Color3.fromRGB(1,1,1)
+  BlackBall.Anchored = false
+  BlackBall.Size = Vector3.new(6,6,6)
+  BlackBall.Parent = game.Workspace
+  
+  local ii = 0
+  
+  task.spawn(function()
+    local StarCFrame = hrp.CFrame * CFrame.new(0,2,-3)
+    BlackBall.CFrame = StarCFrame
+  for i = 1,160,1 do
+  BlackBall.CFrame = StarCFrame * CFrame.new(0,0,-ii)
+  ii = ii + 6
+  task.wait(0.001)
+  end
+  BlackBall:Destroy()
+  end)
+  
+  
+  
+  BlackBall.Touched:Connect(function(hit)
+    if hit.Parent:FindFirstChild("Humanoid") and hit.Parent:FindFirstChild("Humanoid") ~= hm then
+      hit.Parent:FindFirstChild("Humanoid").Health = hit.Parent:FindFirstChild("Humanoid").Health - 50
+    elseif hit:IsA("BasePart") and not hit:IsDescendantOf(Char) then
+      local exp = Instance.new("Explosion")
+      exp.Position = hit.Position
+      exp.BlastRadius = 10
+      exp.Parent = game.Workspace
+      task.wait(0.01)
+      hit:Destroy()
+    end
+    
+task.wait(1)
+
+for _, tracks in ipairs(hm:GetPlayingAnimationTracks()) do
+  if tracks.Animation then
+    if tracks.Animation.AnimationId == "rbxassetid://10714395441" then
+      tracks:Stop()
+      end
+  end
 end
 
--- Animación de cámara
-local function CamAnimation()
-        camera.CameraType = Enum.CameraType.Scriptable
-        local char = player.Character
-        if char then
-                local head = char:FindFirstChild("Head")
-                if head then
-                        char:FindFirstChild("HumanoidRootPart").Anchored = true
-                        local camPos = head.Position + Vector3.new(0, 0, -4)
-                        local goal = {
-                                CFrame = CFrame.lookAt(camPos, head.Position)
-                        }
-                        local Tween = TweenService:Create(camera, info, goal)
-                        Tween:Play()
-                end
+if isIdle and isPlayIdleAnim then
+  PlayAnim(IdleAnimId,1)
+elseif isMove and isPlayMoveAnim then
+  PlayAnim(MoveAnimId,1)
+end
+
+    
+end)
+task.wait(2)
+InCooldownBlackBall = false
+end
+
+local Uis = game:GetService("UserInputService")
+
+Uis.InputBegan:Connect(function(input)
+  if input.KeyCode == Enum.KeyCode.F then
+    if InCooldownBlackBall then
+      return
+    else
+      BlackBallAttack()
+    end
+  end
+end)
+
+
+local NearestPlayer = nil
+local MinDistance = math.huge
+
+local function GetNearestPlayer()
+NearestPlayer = nil
+MinDistance = math.huge
+  for _, p in ipairs(game.Players:GetPlayers()) do
+    if p ~= Player then
+    local pChar = p.Character
+    if pChar then
+      local phrp = pChar:FindFirstChild("HumanoidRootPart")
+      local distance = (hrp.Position - phrp.Position).Magnitude
+      if distance <= MinDistance then
+        MinDistance = distance
+        NearestPlayer = p
+      end
+    end
+    end
+end
+end
+
+local NearestTpCooldown = false
+
+
+local function TeleportToNearestPlayer()
+  GetNearestPlayer()
+  local Target = NearestPlayer
+  local TargetChar = Target.Character
+  local TargetHrp = TargetChar:FindFirstChild("HumanoidRootPart")
+  NearestTpCooldown = true
+  
+  
+  local ExpP = Instance.new("MeshPart")
+  ExpP.Size = Vector3.new(0,0,0)
+  ExpP.MeshId = "rbxassetid://930476639"
+  ExpP.Material = Enum.Material.Neon
+  ExpP.CanCollide = false
+  ExpP.Anchored = true
+  ExpP.Color = Color3.fromRGB(1,1,1)
+  ExpP.Parent = Char
+  
+  
+  if TargetHrp and hrp then
+    for i = 0,0.5,0.05 do
+      ExpP.CFrame = hrp.CFrame
+      ExpP.Size = Vector3.new(i,i,i)
+      task.wait(0.001)
+    end
+    hrp.CFrame = TargetHrp.CFrame * CFrame.new(0,0,2)
+    for i = 0.5,0,-0.05 do
+      ExpP.CFrame = hrp.CFrame
+      ExpP.Size = Vector3.new(i,i,i)
+      task.wait(0.001)
+    end
+  end
+  
+  wait(1)
+  NearestTpCooldown = false
+end
+
+Uis.InputBegan:Connect(function(input)
+  if input.KeyCode == Enum.KeyCode.Z then
+    if NearestTpCooldown then
+      return
+    else
+    TeleportToNearestPlayer()
+    end
+  end
+end)
+
+
+local EvilPulseCooldown = false
+
+
+local function EvilPulse()
+  EvilPulseCooldown = true
+  PlayAnim("rbxassetid://10714164866",1)
+  for _, t in ipairs(hm:GetPlayingAnimationTracks()) do
+    if t.Animation then
+      if t.Animation.AnimationId == IdleAnimId or t.Animation.AnimationId == MoveAnimId then
+        t:Stop()
+      end
+    end
+  end
+  
+  
+  local Pulse = Instance.new("MeshPart")
+      Pulse.MeshId = HaloId
+      Pulse.CanCollide = false
+      Pulse.Size = Vector3.new(2,2,2)
+      Pulse.Material = Enum.Material.Neon
+      Pulse.Color = Color3.fromRGB(1,1,1)
+      Pulse.Transparency = 0.7
+      Pulse.Parent = game.Workspace
+  
+  
+  Pulse.Touched:Connect(function(hit)
+        if not hit:IsDescendantOf(Char) then
+        if hit.Name == "HumanoidRootPart" then
+          if hit ~= hrp then
+          hit.Anchored = true
+          task.spawn(function()
+            for i = 1,1000,5 do
+              hit.CFrame = hit.CFrame * CFrame.new(math.random(-5,5),math.random(0,5),math.random(-5,5))
+              task.wait(0.001)
+            end
+            hit.Anchored = false
+          end)
+          end
         end
-end
-
--- Diálogo
-local function dialog()
-        local fadeIn = { TextTransparency = 0 }
-        local tweenIn = TweenService:Create(textLabel, TweenInfo.new(0.5), fadeIn)
-        tweenIn:Play()
-        tweenIn.Completed:Wait()
-
-        TypewriterEffect(textLabel, TextOne, baseTypeSound)
-        wait(2)
-        TypewriterEffect(textLabel, TextTwo, baseTypeSound)
-        wait(2)
-        TypewriterEffect(textLabel, TextThree, baseTypeSound)
-        wait(2)
-
-        local fadeOut = {
-                TextTransparency = 1,
-                BackgroundTransparency = 1
-        }
-        local fadeOutTwo = {
-                Transparency = 1
-        }
-        local tweenOut = TweenService:Create(textLabel, TweenInfo.new(1), fadeOut)
-        tweenOut:Play()
-        local tweenOutTwo = TweenService:Create(frame, TweenInfo.new(1), fadeOutTwo)
-        tweenOutTwo:Play()
-        tweenOutTwo.Completed:Wait()
-
-        local imageGoal = { ImageTransparency = 0 }
-        local ImageTween = TweenService:Create(image, info, imageGoal)
-        ImageTween:Play()
-
-        local textGoal = { TextTransparency = 0 }
-        local TextTween = TweenService:Create(loveText, info, textGoal)
-        local TextTweenTwo = TweenService:Create(emojiText, info, textGoal)
-
-        TextTween:Play()
-        TextTweenTwo:Play()
-        TextTweenTwo.Completed:Wait()
-
-        local OutTweenImage = { ImageTransparency = 1 }
-        local textOutTween = { TextTransparency = 1 }
-
-        local tweenOutThree = TweenService:Create(image, TweenInfo.new(1), OutTweenImage)
-        tweenOutThree:Play()
-
-        local textTweenTwoo = TweenService:Create(loveText, info, textOutTween)
-        local textTweenTwloo = TweenService:Create(emojiText, info, textOutTween)
-
-        textTweenTwloo:Play()
-        textTweenTwoo:Play()
-        textTweenTwoo.Completed:Wait()
-end
-
--- 💋 Beso con Highlight
-local function Kiss()
-        local char = player.Character 
-        if char then
-                local head = char:FindFirstChild("Head")
-                if head then
-                        local OriginCamPos = camera.CFrame
-                        local newCameraPos = head.Position + Vector3.new(0, 0, -0.5)
-
-                        local goalOne = {
-                                CFrame = CFrame.lookAt(newCameraPos, head.Position)
-                        }
-                        local Tween = TweenService:Create(camera, info, goalOne)
-                        Tween:Play()
-
-                        local kissSound = Instance.new("Sound")
-                        kissSound.SoundId = "rbxassetid://18114177599"
-                        kissSound.Parent = head
-                        kissSound:Play()
-                        Tween.Completed:Wait()
-                        kissSound:Stop()
-
-                        local goalTwo = {
-                                CFrame = OriginCamPos
-                        }
-                        local TweenTwo = TweenService:Create(camera, info, goalTwo)
-                        TweenTwo:Play()
-
-                        task.wait(0.3)
-
-                        local highlight = Instance.new("Highlight")
-                        highlight.Adornee = head
-                        highlight.FillColor = Color3.fromRGB(255, 170, 180)
-                        highlight.FillTransparency = 1
-                        highlight.OutlineTransparency = 1
-                        highlight.Parent = head
-
-                        local fadeInHighlight = TweenService:Create(highlight, info, { FillTransparency = 0.5 })
-                        fadeInHighlight:Play()
-                        fadeInHighlight.Completed:Wait()
-
-                        local hrp = char:FindFirstChild("HumanoidRootPart")
-                        if hrp then
-                                hrp.Anchored = false
-                                local yipiii = Instance.new("Sound")
-                                yipiii.SoundId = "rbxassetid://128105257754675"
-                                yipiii.Parent = head
-                                yipiii.Looped = true
-                                yipiii:Play()
-                                for i = 1, 10 do 
-                                        char:FindFirstChild("Humanoid").Jump = true
-                                end
-                                for i = 1, 100 do
-                                        char:FindFirstChild("Humanoid").Jump = true
-                                        wait(0.01)
-                                        hrp.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(40), 0)
-                                end
-                                hrp.CFrame = CFrame.lookAt(hrp.Position, camera.CFrame.Position)
-                                wait(0.5)
-                                yipiii:Stop()
-                                char:BreakJoints()
-                        end
-                end
         end
+      end)
+  
+  
+  
+  task.spawn(function()
+  for i = 1,10000,5 do
+            Pulse.CFrame = hrp.CFrame
+            Pulse.Size = Vector3.new(i,2,i)
+            task.wait(0.001)
+  end
+  end)
+  
+  wait(1)
+  for _, tracks in ipairs(hm:GetPlayingAnimationTracks()) do
+  if tracks.Animation then
+    if tracks.Animation.AnimationId == "rbxassetid://10714164866" then
+      tracks:Stop()
+      end
+  end
 end
 
--- 🌸 Efecto final extra romántico con 🌹 como TextLabel
-local function RomanticFinal()
-        local blur = Instance.new("BlurEffect")
-        blur.Size = 0
-        blur.Parent = game.Lighting
-        local blurTween = TweenService:Create(blur, TweenInfo.new(2), { Size = 24 })
-        blurTween:Play()
-
-        local finalMsg = Instance.new("TextLabel")
-        finalMsg.Text = "Solo quería recordarte que eres lo más bonito que tengo. 💕\nGracias por estar en mi vida."
-        finalMsg.Size = UDim2.new(0.6, 0, 0.2, 0)
-        finalMsg.Position = UDim2.new(0.2, 0, 0.4, 0)
-        finalMsg.TextColor3 = Color3.new(1, 1, 1)
-        finalMsg.TextTransparency = 1
-        finalMsg.TextScaled = true
-        finalMsg.BackgroundTransparency = 1
-        finalMsg.Font = Enum.Font.GothamBold
-        finalMsg.TextWrapped = true
-        finalMsg.ZIndex = 100
-        finalMsg.Parent = screenGui
-
-        local finalTween = TweenService:Create(finalMsg, TweenInfo.new(1), { TextTransparency = 0 })
-        finalTween:Play()
-
-        local flower = Instance.new("TextLabel")
-        flower.Text = "🌹"
-        flower.TextScaled = true
-        flower.Font = Enum.Font.GothamBlack
-        flower.TextColor3 = Color3.fromRGB(255, 105, 180)
-        flower.TextTransparency = 1
-        flower.Size = UDim2.new(0.15, 0, 0.3, 0)
-        flower.Position = UDim2.new(0.425, 0, 0.15, 0)
-        flower.BackgroundTransparency = 1
-        flower.ZIndex = 101
-        flower.Parent = screenGui
-
-        local flowerTween = TweenService:Create(flower, TweenInfo.new(1), { TextTransparency = 0 })
-        flowerTween:Play()
-
-        for i = 1, 6 do
-                local scaleUp = TweenService:Create(loveText, TweenInfo.new(0.2), { Size = UDim2.new(0.22, 0, 0.33, 0) })
-                local scaleDown = TweenService:Create(loveText, TweenInfo.new(0.2), { Size = UDim2.new(0.2, 0, 0.3, 0) })
-                scaleUp:Play()
-                scaleUp.Completed:Wait()
-                scaleDown:Play()
-                scaleDown.Completed:Wait()
-        end
+if isIdle and isPlayIdleAnim then
+  PlayAnim(IdleAnimId,1)
+elseif isMove and isPlayMoveAnim then
+  PlayAnim(MoveAnimId,1)
+end
+  
+  Pulse:Destroy()
+  EvilPulseCooldown = false
 end
 
--- Ejecutar todo
-CamAnimation()
-dialog()
-Kiss()
-RomanticFinal()
+
+Uis.InputBegan:Connect(function(input)
+  if input.KeyCode == Enum.KeyCode.X then
+    if EvilPulseCooldown then
+      return
+    else
+      EvilPulse()
+    end
+  end
+end)
+
+
+local VoidDragCooldown = false
+
+
+local function VoidDrag()
+  VoidDragCooldown = true
+  for _, p in ipairs(game.Players:GetPlayers()) do
+    if p ~= Player then
+    local pChar = p.Character
+    if pChar then
+      local pHrp = pChar:FindFirstChild("HumanoidRootPart")
+      if pHrp then
+      pHrp.Anchored = true
+      if pHrp then
+        local void = Instance.new("Part")
+        void.Size = Vector3.new(5,0.3,5)
+        void.Color = Color3.fromRGB(1,1,1)
+        void.Material = Enum.Material.Neon
+        void.Anchored = true
+        void.CFrame = pHrp.CFrame * CFrame.new(0,-3.1,0)
+        void.Parent = game.Workspace
+        
+        task.spawn(function()
+          for i = 1,10,1 do
+        pHrp.CFrame = pHrp.CFrame * CFrame.new(0,-1,0)
+        task.wait(0.001)
+          end
+          
+  if hrp.Music then
+    hrp.Music:Stop()
+  end
+          
+  local sound = Instance.new("Sound")
+  sound.Name = "Laught"
+  sound.SoundId = "rbxassetid://76328397266180"
+  sound.Volume = 7
+  sound.Looped = true
+  sound.Parent = void
+  sound:Play()
+  
+  local sound2 = Instance.new("Sound")
+  sound2.Name = "HumanScreamer"
+  sound2.SoundId = "rbxassetid://6108565657"
+  sound2.Volume = 10
+  sound2.Looped = true
+  sound2.Parent = pHrp
+  sound2:Play()
+          
+          
+          
+          
+          
+          task.wait(10)
+          if hrp.Music then
+            hrp.Music:Play()
+          end
+          
+          sound:Destroy()
+          sound2:Destroy()
+          void:Destroy()
+          pHrp.Anchored = false
+          VoidDragCooldown = false
+        end)
+      end
+      end
+    end
+    end
+  end
+end
+
+
+Uis.InputBegan:Connect(function(input)
+  if input.KeyCode == Enum.KeyCode.C then
+    if VoidDragCooldown then
+      return
+    else
+      VoidDrag()
+    end
+  end
+end)
+
+
+local tiempo = 0
+local min = 2
+local max = 7
+local center = (min + max) / 2 -- 4.5
+local amplitude = (max - min) / 2 -- 2.5
+
+
+Run.Heartbeat:Connect(function(deltaTime)
+    if isIdle then
+      tiempo = tiempo + deltaTime
+        local offset = math.sin(tiempo) * amplitude
+        local y = offset + center
+        altura = y
+    end
+end) 
